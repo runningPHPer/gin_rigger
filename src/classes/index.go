@@ -1,14 +1,15 @@
 package classes
 
-import "github.com/gin-gonic/gin"
+import (
+	"gin++/src/rigger"
+	"github.com/gin-gonic/gin"
+)
 
 type IndexClass struct {
-	*gin.Engine
 }
 
-//所谓的构造函数
-func NewIndexClass(engine *gin.Engine) *IndexClass {
-	return &IndexClass{Engine: engine} //指针需要赋值
+func NewIndexClass() *IndexClass {
+	return &IndexClass{}
 }
 
 //业务方法
@@ -18,6 +19,6 @@ func (this *IndexClass) GetIndex() gin.HandlerFunc {
 	}
 }
 
-func (this *IndexClass) Build() {
-	this.Handle("GET", "/", this.GetIndex())
+func (this *IndexClass) Build(rigger *rigger.Rigger) { //rigger传进来
+	rigger.Handle("GET", "/", this.GetIndex()) //把内容隐藏在这里，main就很干净
 }

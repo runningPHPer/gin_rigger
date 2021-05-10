@@ -1,12 +1,14 @@
 package main
 
 import (
-	"gin++/src/classes"
-	"github.com/gin-gonic/gin"
+	. "gin++/src/classes"
+	"gin++/src/rigger"
 )
 
 func main() {
-	r := gin.New()
-	classes.NewIndexClass(r).Build()
-	r.Run(":8080")
+	//完成这一步
+	rigger.Ignite().
+		Mount(NewIndexClass(),
+			NewUserClass()).
+		Start()
 }
