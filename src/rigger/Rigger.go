@@ -18,7 +18,7 @@ func (this *Rigger) Start() { //最终启动函数
 //中间件方法
 func (this *Rigger) Attach(f Fairing) *Rigger {
 	this.Use(func(context *gin.Context) {
-		err := f.OnRequest()
+		err := f.OnRequest(context)
 		if err != nil {
 			context.AbortWithStatusJSON(400, gin.H{"error": err.Error()}) //中间件发生错误
 		} else {
@@ -29,8 +29,15 @@ func (this *Rigger) Attach(f Fairing) *Rigger {
 }
 
 //重写Handle方法
-func (this *Rigger) Handle(httpMethod, relativePath string, handlers ...gin.HandlerFunc) *Rigger {
-	this.g.Handle(httpMethod, relativePath, handlers...)
+func (this *Rigger) Handle(httpMethod, relativePath string, handler interface{}) *Rigger {
+	//	if h,ok:=handler.(func(context *gin.Context) string);ok{
+	//		this.g.Handle(httpMethod, relativePath, func(context *gin.Context) {
+	//			context.String(200,h(context))
+	//		})
+	//	}
+	if h := Convert(handler); h != nil {
+		this.g.Handle(httpMethod, relativePath, h)
+	}
 	return this
 }
 
