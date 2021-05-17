@@ -8,9 +8,12 @@ import (
 var ResponderList []Responder
 
 func init() {
-	ResponderList = []Responder{new(StringResponder), new(ModelResponder)} //返回的是指针
+	ResponderList = []Responder{new(StringResponder),
+		new(ModelResponder),
+		new(ModelsResponder)} //返回的是指针
 }
 
+//输出格式。返回gin.handlerFunc
 type Responder interface {
 	RespondTo() gin.HandlerFunc
 }
@@ -40,8 +43,18 @@ func (this StringResponder) RespondTo() gin.HandlerFunc {
 //返回Model类型，所以自定义的struct 都视为Model
 type ModelResponder func(context *gin.Context) Model
 
-func (this ModelResponder) RespondTo() gin.HandlerFunc {
+func (this ModelResponder) RespondTo() gin.HandlerFunc { //返回实体类
 	return func(context *gin.Context) {
 		context.JSON(200, this(context))
+	}
+}
+
+//返回Models类型，Model切片
+type ModelsResponder func(context *gin.Context) Models
+
+func (this ModelsResponder) RespondTo() gin.HandlerFunc {
+	return func(context *gin.Context) {
+		context.Writer.Header().Set("Content-Type", "application/json")
+		context.Writer.WriteString(string(this(context)))
 	}
 }

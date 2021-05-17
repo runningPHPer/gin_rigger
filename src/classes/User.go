@@ -21,7 +21,15 @@ func (this *UserClass) UserDetail(ctx *gin.Context) rigger.Model {
 	return &models.UserModel{UserId: 1, UserName: "yuzhonghua"}
 }
 
+func (this *UserClass) Users(ctx *gin.Context) rigger.Models {
+	users := []*models.UserModel{
+		{101, "yuzhonghua"},
+		{102, "pengjun"},
+	}
+	return rigger.MakeModels(users)
+}
 func (this *UserClass) Build(rigger *rigger.Rigger) {
 	rigger.Handle("GET", "/user1", this.UserList)
 	rigger.Handle("GET", "/user2", this.UserDetail)
+	rigger.Handle("GET", "/user3", this.Users)
 }
