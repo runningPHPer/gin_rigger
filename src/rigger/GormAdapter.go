@@ -22,5 +22,12 @@ func NewGormAdapter() *GormAdapter {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
+	sqlDB, err := db.DB()
+	if err != nil {
+		log.Fatal(err)
+	}
+	sqlDB.SetMaxIdleConns(5)
+	sqlDB.SetMaxOpenConns(10)
+
 	return &GormAdapter{db}
 }
