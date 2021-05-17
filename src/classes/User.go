@@ -18,7 +18,10 @@ func (this *UserClass) UserList(ctx *gin.Context) string {
 }
 
 func (this *UserClass) UserDetail(ctx *gin.Context) rigger.Model {
-	return &models.UserModel{UserId: 1, UserName: "yuzhonghua"}
+	userModel := models.NewUserModel()
+	err := ctx.BindUri(userModel)
+	rigger.Error(err, "用户ID不合法")
+	return userModel
 }
 
 func (this *UserClass) Users(ctx *gin.Context) rigger.Models {
@@ -30,6 +33,6 @@ func (this *UserClass) Users(ctx *gin.Context) rigger.Models {
 }
 func (this *UserClass) Build(rigger *rigger.Rigger) {
 	rigger.Handle("GET", "/user1", this.UserList)
-	rigger.Handle("GET", "/user2", this.UserDetail)
+	rigger.Handle("GET", "/user2/:id", this.UserDetail)
 	rigger.Handle("GET", "/user3", this.Users)
 }

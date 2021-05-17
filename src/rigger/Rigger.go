@@ -8,7 +8,9 @@ type Rigger struct {
 }
 
 func Ignite() *Rigger { //所谓的构造函数
-	return &Rigger{Engine: gin.New()}
+	rigger := &Rigger{Engine: gin.New()}
+	rigger.Use(ErrorHandle()) //强制绑定错误处理中间件。不需要修改
+	return rigger
 }
 
 func (this *Rigger) Start() { //最终启动函数
