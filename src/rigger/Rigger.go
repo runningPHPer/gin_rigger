@@ -1,6 +1,7 @@
 package rigger
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"reflect"
 )
@@ -19,7 +20,8 @@ func Ignite() *Rigger { //所谓的构造函数
 }
 
 func (this *Rigger) Start() { //最终启动函数
-	this.Run(":8080") //这里暂时先写死
+	config := InitConfig()
+	this.Run(fmt.Sprintf(":%d", config.Server.Port)) //这里暂时先写死
 }
 
 //中间件方法
