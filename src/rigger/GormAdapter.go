@@ -13,7 +13,7 @@ type GormAdapter struct {
 
 //数据库连接
 func NewGormAdapter() *GormAdapter {
-	dsn := "gorm:gorm@tcp(127.0.0.1:3306)/gorm?charset=utf8&parseTime=True&loc=Local"
+	dsn := "root:123456@tcp(127.0.0.1:3306)/oAuth2?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.New(mysql.Config{
 		DSN: dsn, // DSN data source name
 	}), &gorm.Config{
@@ -28,6 +28,5 @@ func NewGormAdapter() *GormAdapter {
 	}
 	sqlDB.SetMaxIdleConns(5)
 	sqlDB.SetMaxOpenConns(10)
-
 	return &GormAdapter{db}
 }

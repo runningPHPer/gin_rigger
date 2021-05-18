@@ -1,14 +1,16 @@
 package main
 
 import (
-	. "gin++/src/classes"
-	. "gin++/src/middlewares"
-	"gin++/src/rigger"
+	. "gin_rigger/src/classes"
+	. "gin_rigger/src/middlewares"
+	"gin_rigger/src/rigger"
 )
 
 func main() {
 	//完成这一步
-	rigger.Ignite().Attach(NewUserMid()).
+	rigger.Ignite().
+		Beans(rigger.NewGormAdapter(), rigger.NewXormAdapter()).
+		Attach(NewUserMid()).
 		Mount("v1", NewIndexClass(), NewUserClass()).
 		Mount("v2", NewUserClass()).
 		Start()

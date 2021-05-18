@@ -1,12 +1,15 @@
 package classes
 
 import (
-	"gin++/src/models"
-	"gin++/src/rigger"
+	"fmt"
+	"gin_rigger/src/models"
+	"gin_rigger/src/rigger"
 	"github.com/gin-gonic/gin"
 )
 
 type UserClass struct {
+	//*rigger.GormAdapter
+	*rigger.XormAdapter
 }
 
 func NewUserClass() *UserClass {
@@ -21,6 +24,11 @@ func (this *UserClass) UserDetail(ctx *gin.Context) rigger.Model {
 	userModel := models.NewUserModel()
 	err := ctx.BindUri(userModel)
 	rigger.Error(err, "用户ID不合法")
+	has, err := this.Table("users").Where("user_id = ?", userModel.UserId).Get(userModel)
+	if !has {
+		rigger.Error(fmt.Errorf("没有该用户"))
+	}
+	rigger.Error(err)
 	return userModel
 }
 

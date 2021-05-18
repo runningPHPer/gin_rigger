@@ -1,7 +1,7 @@
 package classes
 
 import (
-	"gin++/src/rigger"
+	"gin_rigger/src/rigger"
 	"github.com/gin-gonic/gin"
 )
 

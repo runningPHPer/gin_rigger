@@ -1,8 +1,8 @@
 package models
 
 type UserModel struct {
-	UserId   int `uri:"id" binding:"require,gt>0"`
-	UserName string
+	UserId   int    `json:"user_id" gorm:"column:user_id" uri:"id" binding:"required,gt=0"`
+	UserName string `json:"user_name" gorm:"column:user_name"`
 }
 
 func NewUserModel() *UserModel {
