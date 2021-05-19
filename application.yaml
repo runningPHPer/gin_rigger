@@ -1,2 +1,8 @@
 server:
   port: 8081
+
+
+config:
+  user:
+    score: 100
+    age: 20

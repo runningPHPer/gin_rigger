@@ -10,6 +10,7 @@ import (
 type UserClass struct {
 	//*rigger.GormAdapter
 	*rigger.XormAdapter
+	Age *rigger.Value `prefix:"user.age"`
 }
 
 func NewUserClass() *UserClass {
@@ -17,7 +18,7 @@ func NewUserClass() *UserClass {
 }
 
 func (this *UserClass) UserList(ctx *gin.Context) string {
-	return "用户列表"
+	return "用户列表" + this.Age.String()
 }
 
 func (this *UserClass) UserDetail(ctx *gin.Context) rigger.Model {
