@@ -14,7 +14,7 @@ func main() {
 	rigger.Ignite().
 		Beans(rigger.NewGormAdapter(), rigger.NewXormAdapter()).
 		Attach(NewUserMid()).
-		Mount("v1", NewIndexClass()).
+		Mount("v1", NewIndexClass(), NewCourseClass()).
 		Mount("v2", NewUserClass()).
 		Start()
 }
