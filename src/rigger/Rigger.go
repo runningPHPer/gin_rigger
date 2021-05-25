@@ -14,6 +14,11 @@ type Rigger struct {
 func Ignite() *Rigger { //所谓的构造函数
 	rigger := &Rigger{Engine: gin.New(), beanFactory: NewBeanFactory()} //返回指针对象需要赋值
 	rigger.Use(ErrorHandle())                                           //强制绑定错误处理中间件。不需要修改
+	config := InitConfig()
+	rigger.beanFactory.setBean(config) //整个配置文件加入bean中
+	if config.Server.Html != "" {      //判断是否配置类模版文件
+		rigger.LoadHTMLGlob(config.Server.Html)
+	}
 	return rigger
 }
 

@@ -14,8 +14,8 @@ require (
 	golang.org/x/crypto v0.0.0-20210513164829-c07d793c2f9a // indirect
 	golang.org/x/sys v0.0.0-20210514084401-e8d321eab015 // indirect
 	golang.org/x/text v0.3.6 // indirect
-	gopkg.in/yaml.v2 v2.4.0 // indirect
+	gopkg.in/yaml.v2 v2.4.0
 	gorm.io/driver/mysql v1.1.0
 	gorm.io/gorm v1.21.10
-	xorm.io/xorm v1.1.0 // indirect
+	xorm.io/xorm v1.1.0
 )

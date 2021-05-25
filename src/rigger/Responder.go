@@ -10,7 +10,8 @@ var ResponderList []Responder
 func init() {
 	ResponderList = []Responder{new(StringResponder),
 		new(ModelResponder),
-		new(ModelsResponder)} //返回的是指针
+		new(ModelsResponder),
+		new(ViewResponder)} //返回的是指针
 }
 
 //输出格式。返回gin.handlerFunc
@@ -56,5 +57,15 @@ func (this ModelsResponder) RespondTo() gin.HandlerFunc {
 	return func(context *gin.Context) {
 		context.Writer.Header().Set("Content-Type", "application/json")
 		context.Writer.WriteString(string(this(context)))
+	}
+}
+
+//返回模版文件
+type View string
+type ViewResponder func(context *gin.Context) View
+
+func (this ViewResponder) RespondTo() gin.HandlerFunc {
+	return func(context *gin.Context) {
+		context.HTML(200, string(this(context))+".html", nil)
 	}
 }
