@@ -1,7 +1,6 @@
 package classes
 
 import (
-	"fmt"
 	"gin_rigger/src/rigger"
 	"github.com/gin-gonic/gin"
 )
@@ -15,7 +14,7 @@ func NewIndexClass() *IndexClass {
 
 //业务方法
 func (this *IndexClass) GetIndex(context *gin.Context) rigger.View {
-	fmt.Println(123)
+	context.Set("name", "yuzhonghua")
 	return "index"
 }
 

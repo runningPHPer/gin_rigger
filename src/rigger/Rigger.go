@@ -2,6 +2,7 @@ package rigger
 
 import (
 	"fmt"
+	"gin_rigger/src/funcs"
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,6 +18,7 @@ func Ignite() *Rigger { //所谓的构造函数
 	config := InitConfig()
 	rigger.beanFactory.setBean(config) //整个配置文件加入bean中
 	if config.Server.Html != "" {      //判断是否配置类模版文件
+		rigger.FuncMap = funcs.FuncMap
 		rigger.LoadHTMLGlob(config.Server.Html)
 	}
 	return rigger
