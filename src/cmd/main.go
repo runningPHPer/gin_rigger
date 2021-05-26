@@ -4,6 +4,7 @@ import (
 	. "gin_rigger/src/classes"
 	. "gin_rigger/src/middlewares"
 	"gin_rigger/src/rigger"
+	"log"
 )
 
 func main() {
@@ -16,5 +17,8 @@ func main() {
 		Attach(NewUserMid()).
 		Mount("v1", NewIndexClass(), NewCourseClass()).
 		Mount("v2", NewUserClass()).
+		Task("0/3 * * * * *", func() {
+			log.Println("计划任务，执行")
+		}).
 		Start()
 }

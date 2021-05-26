@@ -4,14 +4,17 @@ import (
 	"fmt"
 	"gin_rigger/src/funcs"
 	"github.com/gin-gonic/gin"
+	"log"
 )
 
+//脚手架名称
 type Rigger struct {
 	*gin.Engine                  //把engine放在主类里面
 	g           *gin.RouterGroup //路由分组
 	beanFactory *BeanFactory     //加入的其他对象
 }
 
+//初始化函数
 func Ignite() *Rigger { //所谓的构造函数
 	rigger := &Rigger{Engine: gin.New(), beanFactory: NewBeanFactory()} //返回指针对象需要赋值
 	rigger.Use(ErrorHandle())                                           //强制绑定错误处理中间件。不需要修改
@@ -24,8 +27,10 @@ func Ignite() *Rigger { //所谓的构造函数
 	return rigger
 }
 
+//启动函数
 func (this *Rigger) Start() { //最终启动函数
 	config := InitConfig()                           //初始化配置
+	getCronTask().Start()                            //启动定时任务
 	this.Run(fmt.Sprintf(":%d", config.Server.Port)) //这里暂时先写死
 }
 
@@ -50,11 +55,6 @@ func (this *Rigger) Beans(beans ...interface{}) *Rigger {
 
 //重写Handle方法
 func (this *Rigger) Handle(httpMethod, relativePath string, handler interface{}) *Rigger {
-	//	if h,ok:=handler.(func(context *gin.Context) string);ok{
-	//		this.g.Handle(httpMethod, relativePath, func(context *gin.Context) {
-	//			context.String(200,h(context))
-	//		})
-	//	}
 	if h := Convert(handler); h != nil {
 		this.g.Handle(httpMethod, relativePath, h)
 	}
@@ -68,5 +68,15 @@ func (this *Rigger) Mount(group string, classes ...IClass) *Rigger { //返回自
 		class.Build(this)              //这里很关键，这样main里面就不需要调用了
 		this.beanFactory.inject(class) //设置属性
 	}
+	return this
+}
+
+//params 类似Linux的定时任务表达式（0/3 * * * * *），function 定时任务需要执行的方法
+func (this *Rigger) Task(params string, function func()) *Rigger {
+	entryID, err := getCronTask().AddFunc(params, function) //先支持方法
+	if err != nil {
+		log.Println(err.Error())
+	}
+	log.Println("任务ID为：", entryID) //记录
 	return this
 }

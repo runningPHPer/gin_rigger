@@ -41,6 +41,8 @@ type SysConfig struct {
 func NewSysConfig() *SysConfig {
 	return &SysConfig{Server: &ServerConfig{Port: 8080, Name: "myweb"}}
 }
+
+//初始化配置
 func InitConfig() *SysConfig {
 	config := NewSysConfig()
 	if b := LoadConfigFile(); b != nil {
