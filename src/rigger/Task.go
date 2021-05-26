@@ -23,7 +23,7 @@ func init() {
 	taskList := getTaskList() //得到任务列表
 	go func() {
 		for task := range taskList {
-			doTask(task)
+			doTask(task) //以协程的方式执行任务
 		}
 	}()
 }

@@ -22,7 +22,7 @@ func (this *CourseClass) Detail(context *gin.Context) rigger.Model {
 	course := models.NewCourseModel()
 	rigger.Error(context.ShouldBindUri(course))
 	rigger.Error(this.Table("sc_subject_course").Where("c_id = ?", course.CId).Find(course).Error)
-	rigger.Task(this.UpdateFalse, func() {
+	rigger.Task(this.UpdateFalse, func() { //这里使用匿名函数向回调函数传值
 		this.UpdateFalseDown(course.CId)
 	}, course.CId) //执行协程异步任务
 	return course
