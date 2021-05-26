@@ -23,8 +23,21 @@ func init() {
 	taskList := getTaskList() //得到任务列表
 	go func() {
 		for task := range taskList {
-			task.Exec() //执行任务
+			doTask(task)
 		}
+	}()
+}
+
+//执行任务
+func doTask(task *TaskExecutor) {
+	go func() {
+		//回调函数
+		defer func() {
+			if task.callback != nil {
+				task.callback() //执行回调任务
+			}
+		}()
+		task.Exec() //执行任务
 	}()
 }
 
@@ -32,11 +45,12 @@ func init() {
 type TaskExecutor struct {
 	function TaskFunc
 	params   []interface{}
+	callback func()
 }
 
-//初始化任务执行者
-func NewTaskExecutor(function TaskFunc, params []interface{}) *TaskExecutor {
-	return &TaskExecutor{function: function, params: params}
+//初始化计划任务
+func NewTaskExecutor(function TaskFunc, params []interface{}, callback func()) *TaskExecutor {
+	return &TaskExecutor{function: function, params: params, callback: callback}
 }
 
 func (this *TaskExecutor) Exec() { //执行任务
@@ -44,6 +58,12 @@ func (this *TaskExecutor) Exec() { //执行任务
 }
 
 //执行一次任务
-func Task(function TaskFunc, params ...interface{}) {
-	getTaskList() <- NewTaskExecutor(function, params) //向chan里面塞入任务
+func Task(function TaskFunc, callback func(), params ...interface{}) {
+	if function == nil {
+		return
+	}
+	//塞入任务时，以协程的方式加入
+	go func() {
+		getTaskList() <- NewTaskExecutor(function, params, callback) //向chan里面塞入任务
+	}()
 }
