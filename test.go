@@ -82,4 +82,6 @@ func main() {
 
 	lis.Run()
 
+	fmt.Println(reflect.TypeOf(lis))
+
 }
